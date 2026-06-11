@@ -1,0 +1,9 @@
+FROM lampa
+
+ARG LAMPA_DOMAIN=192.168.1.240:8080
+
+COPY boot.js /usr/local/apache2/htdocs/boot.js
+COPY smile_reactions.js /usr/local/apache2/htdocs/smile_reactions.js
+
+RUN sed -i "s|{domain}|${LAMPA_DOMAIN}|g" /usr/local/apache2/htdocs/msx/start.json && \
+    sed -i "s|</body>|<script src=\"./boot.js\"></script></body>|" /usr/local/apache2/htdocs/index.html

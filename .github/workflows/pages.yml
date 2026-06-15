@@ -1,0 +1,53 @@
+name: Publish to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - smile_reactions.js
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare Pages directory
+        run: |
+          mkdir -p _site
+          cp smile_reactions.js _site/s.js
+          # Inject a tiny index so the root URL shows plugin info
+          VERSION=$(node -e "const fs=require('fs');const m=fs.readFileSync('smile_reactions.js','utf8').match(/var VERSION\s*=\s*\"([^\"]+)\"/);console.log(m[1])")
+          cat > _site/index.html << EOF
+          <!DOCTYPE html>
+          <html lang="ru">
+          <head><meta charset="utf-8"><title>Смайлики рейтинга v${VERSION}</title></head>
+          <body>
+          <h1>Смайлики рейтинга <code>v${VERSION}</code></h1>
+          <p>Lampa-плагин. Добавьте в Lampa как внешний плагин:</p>
+          <pre>https://mrkvka.github.io/lampa-smile-reactions/s.js</pre>
+          </body></html>
+          EOF
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

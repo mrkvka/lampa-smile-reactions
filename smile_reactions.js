@@ -2,6 +2,7 @@
   "use strict";
 
   var VERSION = "1.6.0";
+  var PLUGIN_NAME = "Смайлики рейтинга";
 
   if (window.__smileReactionsPluginVersion === VERSION) return;
   window.__smileReactionsPluginVersion = VERSION;
@@ -11,6 +12,20 @@
   var observerStarted = false;
   var manifestReady = false;
   var resizeBound = false;
+
+  var manifest = {
+    type: "other",
+    version: VERSION,
+    name: PLUGIN_NAME,
+    description: "Добавляет смайлики с реакциями на постеры в лентах, категориях и поиске.",
+    component: "smile_reactions"
+  };
+
+  // Register manifest synchronously so Lampa can show name+version immediately
+  // when the plugin card is first rendered.
+  if (window.Lampa && Lampa.Manifest) {
+    try { Lampa.Manifest.plugins = manifest; manifestReady = true; } catch (e) {}
+  }
 
   var LAYOUT = {
     leftRatio: 0.03,
@@ -23,14 +38,6 @@
     compactWidth: 100,
     tightWidth: 76,
     iconsWidth: 56
-  };
-
-  var manifest = {
-    type: "other",
-    version: VERSION,
-    name: "Смайлики рейтинга",
-    description: "Добавляет смайлики с реакциями только на постеры в лентах, категориях и поиске.",
-    component: "smile_reactions"
   };
 
   var POPULAR_ITEMS = [

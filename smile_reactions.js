@@ -5,7 +5,7 @@
   // synchronously during script execution.
   var _scriptSrc = document.currentScript ? document.currentScript.src : '';
 
-  var VERSION = "1.6.1";
+  var VERSION = "1.6.2";
   var PLUGIN_NAME = "Смайлики рейтинга";
 
   if (window.__smileReactionsPluginVersion === VERSION) return;

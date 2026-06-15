@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  var VERSION = "1.5.1";
+  var VERSION = "1.6.0";
 
   if (window.__smileReactionsPluginVersion === VERSION) return;
   window.__smileReactionsPluginVersion = VERSION;
@@ -13,16 +13,16 @@
   var resizeBound = false;
 
   var LAYOUT = {
-    leftRatio: 0.025,
-    gapToVoteRatio: 0.018,
-    gapRatio: 0.009,
-    heightRatio: 0.78,
-    fontRatio: 0.68,
-    fontFitDivisor: 11.6,
-    minFont: 10,
-    compactWidth: 120,
-    tightWidth: 96,
-    iconsWidth: 74
+    leftRatio: 0.03,
+    gapToVoteRatio: 0.022,
+    gapRatio: 0.014,
+    heightRatio: 1.25,
+    fontRatio: 0.9,
+    fontFitDivisor: 9.0,
+    minFont: 12,
+    compactWidth: 100,
+    tightWidth: 76,
+    iconsWidth: 56
   };
 
   var manifest = {
@@ -179,10 +179,10 @@
 
     style.dataset.version = VERSION;
     style.textContent = [
-      ".card__smile-reactions{box-sizing:border-box;position:absolute;left:var(--sr-left,.35em);bottom:var(--sr-bottom,.3em);height:var(--sr-height,1.8em);z-index:2;display:flex;align-items:center;justify-content:space-evenly;gap:var(--sr-gap,.12em);padding:0 var(--sr-pad,.24em);border-radius:999px;background:rgba(0,0,0,.56);box-shadow:0 .1em .45em rgba(0,0,0,.22);overflow:hidden;pointer-events:none;color:#fff;font-size:var(--sr-font,1.08em);font-weight:700;line-height:normal;}",
-      ".card__smile-reaction{box-sizing:border-box;min-width:0;flex:0 1 auto;padding:0;display:flex;align-items:center;justify-content:center;gap:var(--sr-inner-gap,.08em);white-space:nowrap;line-height:normal;}",
-      ".card__smile-reaction-emoji{width:.92em;height:.92em;line-height:normal;display:block;flex:0 0 auto;object-fit:contain;transition:opacity .15s;}",
-      ".card__smile-reaction-count{font-size:.74em;line-height:normal;display:block;min-width:0;overflow:hidden;text-overflow:clip;}",
+      ".card__smile-reactions{box-sizing:border-box;position:absolute;left:var(--sr-left,.4em);bottom:var(--sr-bottom,.4em);height:var(--sr-height,2.2em);z-index:2;display:flex;align-items:center;justify-content:space-evenly;gap:var(--sr-gap,.18em);padding:0 var(--sr-pad,.38em);border-radius:999px;background:rgba(0,0,0,.68);box-shadow:0 .12em .6em rgba(0,0,0,.38);overflow:hidden;pointer-events:none;color:#fff;font-size:var(--sr-font,1.2em);font-weight:700;line-height:normal;}",
+      ".card__smile-reaction{box-sizing:border-box;min-width:0;flex:0 1 auto;padding:0;display:flex;align-items:center;justify-content:center;gap:var(--sr-inner-gap,.1em);white-space:nowrap;line-height:normal;}",
+      ".card__smile-reaction-emoji{width:1.05em;height:1.05em;line-height:normal;display:block;flex:0 0 auto;object-fit:contain;transition:opacity .15s;}",
+      ".card__smile-reaction-count{font-size:.82em;line-height:normal;display:block;min-width:0;overflow:hidden;text-overflow:clip;}",
       ".card__smile-reactions.is--compact .card__smile-reaction:nth-child(3) .card__smile-reaction-count{display:none;}",
       ".card__smile-reactions.is--tight .card__smile-reaction:nth-child(n+2) .card__smile-reaction-count{display:none;}",
       ".card__smile-reactions.is--icons .card__smile-reaction-count{display:none;}"
@@ -206,7 +206,7 @@
     var bottom = Math.max(0, Math.round(viewRect.bottom - center - height / 2));
     var voteFont = parseFloat(getComputedStyle(vote).fontSize) || 20;
     var font = Math.max(LAYOUT.minFont, Math.min(voteFont * LAYOUT.fontRatio, available / LAYOUT.fontFitDivisor));
-    var pad = Math.max(2, Math.min(7, available / 38));
+    var pad = Math.max(4, Math.min(12, available / 26));
 
     holder.classList.toggle("is--compact", available < LAYOUT.compactWidth);
     holder.classList.toggle("is--tight", available < LAYOUT.tightWidth);

@@ -1,7 +1,11 @@
 (function () {
   "use strict";
 
-  var VERSION = "1.6.0";
+  // Capture before any async code — document.currentScript is only available
+  // synchronously during script execution.
+  var _scriptSrc = document.currentScript ? document.currentScript.src : '';
+
+  var VERSION = "1.6.1";
   var PLUGIN_NAME = "Смайлики рейтинга";
 
   if (window.__smileReactionsPluginVersion === VERSION) return;
@@ -21,8 +25,7 @@
     component: "smile_reactions"
   };
 
-  // Register manifest synchronously so Lampa can show name+version immediately
-  // when the plugin card is first rendered.
+  // Synchronous manifest registration — covers versions that read Lampa.Manifest.plugins.
   if (window.Lampa && Lampa.Manifest) {
     try { Lampa.Manifest.plugins = manifest; manifestReady = true; } catch (e) {}
   }
@@ -288,10 +291,40 @@
     scheduleRender.timer = setTimeout(render, 80);
   }
 
+  // Write name/author/descr directly into Lampa's plugins storage array so the
+  // plugin manager card shows them.  Lampa stores each plugin as
+  // {url, status, name?, author?, descr?} — the card reads data.name etc.
+  function updatePluginEntry() {
+    if (!window.Lampa || !Lampa.Storage) return;
+
+    try {
+      var list = Lampa.Storage.get('plugins', '[]');
+
+      if (!Array.isArray(list) || !list.length) return;
+
+      var srcBase = _scriptSrc.split('?')[0];
+      var updated = false;
+
+      list.forEach(function (plug) {
+        var plugBase = (plug.url || '').split('?')[0];
+
+        if (plugBase && srcBase && plugBase === srcBase) {
+          plug.name   = PLUGIN_NAME;
+          plug.author = '@mrkvka';
+          plug.descr  = 'Реакции 🔥👍💩 на постерах. v' + VERSION;
+          updated = true;
+        }
+      });
+
+      if (updated) Lampa.Storage.set('plugins', list);
+    } catch (e) {}
+  }
+
   function setManifest() {
     if (window.Lampa && Lampa.Manifest) {
       Lampa.Manifest.plugins = manifest;
       manifestReady = true;
+      updatePluginEntry();
       return true;
     }
 

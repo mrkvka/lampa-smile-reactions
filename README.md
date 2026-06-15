@@ -18,7 +18,7 @@
 
 ## Установка
 
-Добавьте в Lampa как внешний плагин. Короткая GitHub Pages ссылка:
+Добавьте в Lampa как внешний плагин. Ссылка (обновляется автоматически при пуше в `main`):
 
 ```text
 https://mrkvka.github.io/s.js
@@ -30,7 +30,7 @@ https://mrkvka.github.io/s.js
 http://192.168.1.240:8080/smile_reactions.js
 ```
 
-На сервере включен `Cache-Control: no-store` для `boot.js` и `smile_reactions.js`, а `boot.js` дополнительно грузит плагин с cache-busting query string. После обновления файла достаточно полностью перезапустить Lampa.
+На сервере включён `Cache-Control: no-store` для `boot.js` и `smile_reactions.js`, а `boot.js` дополнительно грузит плагин с cache-busting query string. После обновления файла достаточно полностью перезапустить Lampa.
 
 ## Что внутри
 

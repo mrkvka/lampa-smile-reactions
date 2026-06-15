@@ -1,0 +1,41 @@
+name: Publish s.js to mrkvka.github.io
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - smile_reactions.js
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Push s.js to mrkvka/mrkvka.github.io
+        env:
+          PAGES_TOKEN: ${{ secrets.PAGES_TOKEN }}
+        run: |
+          git config --global user.name  "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git clone --depth 1 \
+            "https://x-access-token:${PAGES_TOKEN}@github.com/mrkvka/mrkvka.github.io.git" \
+            _pages
+
+          cp smile_reactions.js _pages/s.js
+
+          cd _pages
+          git add s.js
+
+          if git diff --cached --quiet; then
+            echo "s.js не изменился, деплой не нужен"
+            exit 0
+          fi
+
+          VERSION=$(node -e \
+            "const m=require('fs').readFileSync('s.js','utf8').match(/var VERSION\s*=\s*\"([^\"]+)\"/);console.log(m[1])")
+          git commit -m "chore: update s.js to v${VERSION} (smile-reactions)"
+          git push
